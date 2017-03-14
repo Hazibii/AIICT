@@ -1,0 +1,36 @@
+<?php 
+    require_once ("Include/simple-config.php"); 
+    require_once("Include/connectDB.php");
+    require_once('Include/session.php')
+        
+    confirm_is_admin();
+        
+
+    if(isset($GET['id'])){
+        $id = $_GET['id']; 
+        $page = $GET['page'];
+        if($page == 'products'){
+            $page = 'products.php';
+        } elseif($page == 'delete'){
+            $page = 'deleteProducts.php'
+        } else {
+            header('location: ../index.php');
+        }
+        
+        $sql = "DELETE FORM 'products' WHERE 'id'='$id'";
+        if($run = $db->query($sql)){
+            $_SESSION['status'] = "<p class='pass'>Succesfully Deleted Item.</p>";
+            header('Location: '. $page); 
+            require "../Include/closeDB.php";
+            exit(); 
+        }else{
+            $_SESSION['status'] = "<p>Failed to delete item, please try again</p>";
+            header('Location: '.$page); 
+            require "../Include/closeDB.php";
+            exit();
+        }
+    }else{
+        exit();
+    }
+
+?>
